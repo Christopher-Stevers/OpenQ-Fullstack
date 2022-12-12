@@ -1,0 +1,16 @@
+{
+	"name": "OpenQ-Fullstack",
+	"forwardPorts": [
+		8545,
+		8000,
+		8091,
+		8081,
+		8075,
+		3000,
+		3001,
+		4000
+	],
+	"extensions": [
+		"ms-azuretools.vscode-docker"
+	]
+}

@@ -1,5 +1,6 @@
 # Repositories
 OpenQ-Frontend/
+OpenQ-DRM-Frontend/
 OpenQ-Oracle/
 OpenQ-Contracts/
 OpenQ-CoinAPI/
@@ -28,6 +29,7 @@ OpenQ-Invoice-Server/
 OpenQ-Logging/
 OpenQ-Codemeter/
 OpenQ-User-Registration/
+OpenQ-Espresso/
 
 # Data from The Graph Node's Postgres and IPFS
 data/

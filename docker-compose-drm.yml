@@ -33,11 +33,11 @@ services:
     container_name: graph_node
     image: graphprotocol/graph-node
     ports:
-      - '8000:8000'
-      - '8001:8001'
-      - '8020:8020'
-      - '8030:8030'
-      - '8040:8040'
+      - "8000:8000"
+      - "8001:8001"
+      - "8020:8020"
+      - "8030:8030"
+      - "8040:8040"
     depends_on:
       - ipfs
       - postgres
@@ -46,23 +46,19 @@ services:
       postgres_user: graph-node
       postgres_pass: let-me-in
       postgres_db: graph-node
-      ipfs: 'ipfs:5001'
-      ethereum: 'mainnet:http://ethnode:8545'
+      ipfs: "ipfs:5001"
+      ethereum: "mainnet:http://ethnode:8545"
       GRAPH_LOG: info
   ipfs:
     container_name: ipfs
     image: ipfs/go-ipfs:v0.10.0
     ports:
-      - '5001:5001'
+      - "5001:5001"
   postgres:
     image: postgres
     ports:
-      - '5432:5432'
-    command:
-      [
-        "postgres",
-        "-cshared_preload_libraries=pg_stat_statements"
-      ]
+      - "5432:5432"
+    command: ["postgres", "-cshared_preload_libraries=pg_stat_statements"]
     environment:
       POSTGRES_USER: graph-node
       POSTGRES_PASSWORD: let-me-in
@@ -85,22 +81,6 @@ services:
       - /app/node_modules
       - ./OpenQ-Oracle:/app
       - ./OpenQ-Contracts/artifacts:/app/artifacts
-  openq-user-registration:
-    container_name: openq-user-registration
-    depends_on:
-      - openq-json-rpc-node
-      - openq-contracts
-    build:
-      dockerfile: Dockerfile
-      context: ./OpenQ-User-Registration
-    env_file:
-      - ./OpenQ-User-Registration/.env
-      - ./OpenQ-Contracts/.env.contracts
-    ports:
-      - "8091:8091"
-    volumes:
-      - /app/node_modules
-      - ./OpenQ-User-Registration:/app
   openq-oz-claim-autotask:
     container_name: openq-oz-claim-autotask
     depends_on:
@@ -117,6 +97,22 @@ services:
     volumes:
       - /app/node_modules
       - ./OpenQ-OZ-Claim-Autotask:/app
+  openq-user-registration:
+    container_name: openq-user-registration
+    depends_on:
+      - openq-json-rpc-node
+      - openq-contracts
+    build:
+      dockerfile: Dockerfile
+      context: ./OpenQ-User-Registration
+    env_file:
+      - ./OpenQ-User-Registration/.env
+      - ./OpenQ-Contracts/.env.contracts
+    ports:
+      - "8091:8091"
+    volumes:
+      - /app/node_modules
+      - ./OpenQ-User-Registration:/app
   openq-coinapi:
     container_name: openq-coinapi
     depends_on:
@@ -163,26 +159,41 @@ services:
       - ./OpenQ-Bounty-Actions-Autotask:/app
     env_file:
       - ./OpenQ-Bounty-Actions-Autotask/.env
-  openq-frontend:
-    container_name: openq-frontend
+  openq-bot:
+    container_name: openq-bot
+    depends_on:
+      - openq-bounty-actions-autotask
+      - openq-contracts
+    build:
+      dockerfile: Dockerfile
+      context: ./OpenQ-Bot
+    ports:
+      - "3006:3006"
+    volumes:
+      - /app/node_modules
+      - ./OpenQ-Bot:/app
+    env_file:
+      - ./OpenQ-Bot/.env
+  openq-drm-frontend:
+    container_name: openq-drm-frontend
     depends_on:
       - openq-json-rpc-node
       - openq-contracts
       - openq-api
     build:
       dockerfile: Dockerfile.dev
-      context: ./OpenQ-Frontend
+      context: ./OpenQ-DRM-Frontend
     ports:
       - "3000:3000"
     env_file:
       - ./OpenQ-Contracts/.env
-      - ./OpenQ-Frontend/.env
+      - ./OpenQ-DRM-Frontend/.env
       - ./OpenQ-Contracts/.env.contracts
       - ./OpenQ-Contracts/.env.superfluid.contracts
     volumes:
       - /app/node_modules
       - /app/.next
-      - ./OpenQ-Frontend:/app
+      - ./OpenQ-DRM-Frontend:/app
       - ./OpenQ-Contracts/artifacts:/app/artifacts
   github-oauth-server:
     container_name: github-oauth-server
@@ -201,10 +212,6 @@ services:
     image: redis:6.2.6-alpine
     ports:
       - "6379:6379"
-  curler:
-    container_name: curler
-    image: yauritux/busybox-curl
-    command: sleep 90000
   openq-token-price-cronjob:
     container_name: openq-token-price-cronjob
     depends_on:
@@ -244,7 +251,7 @@ services:
       MONGO_REPLICA_HOST: mongo
       MONGO_REPLICA_PORT: 27018
     ports:
-      - '27018:27018'
+      - "27018:27018"
   mongo-express:
     image: mongo-express
     depends_on:
@@ -262,24 +269,6 @@ services:
     ports:
       - "8888:8081"
     restart: unless-stopped
-<<<<<<< HEAD
-  openq-invoice-server:
-    container_name: openq-invoice-server
-    depends_on:
-      - openq-api
-      - graph-node
-      - openq-coinapi
-    build:
-      dockerfile: Dockerfile.dev
-      context: ./OpenQ-Invoice-Server
-    ports:
-      - "3007:3007"
-    volumes:
-      - /app/node_modules
-      - ./OpenQ-Invoice-Server:/app
-    env_file:
-      - ./OpenQ-Invoice-Server/.env
-
   # openq_superfluid_deployer:
   #   container_name: openq_superfluid_deployer
   #   depends_on:
@@ -291,5 +280,3 @@ services:
   #     context: ./Superfluid-Subgraph
   #   volumes:
   #     - /app/subgraph/node_modules
-=======
->>>>>>> 97989989486261a3505e24206896cd9f4c724457
