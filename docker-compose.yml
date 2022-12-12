@@ -262,7 +262,6 @@ services:
     ports:
       - "8888:8081"
     restart: unless-stopped
-<<<<<<< HEAD
   openq-invoice-server:
     container_name: openq-invoice-server
     depends_on:
@@ -291,5 +290,3 @@ services:
   #     context: ./Superfluid-Subgraph
   #   volumes:
   #     - /app/subgraph/node_modules
-=======
->>>>>>> 97989989486261a3505e24206896cd9f4c724457
